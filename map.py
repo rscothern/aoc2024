@@ -16,9 +16,10 @@ class Pos(PosType):
         return Pos(self.x + other.x, self.y + other.y)
 
 
+
 @dataclass
 class Map:
-    map: List[List[int]]
+    map: List[List[str]]
 
     @property
     def width(self):
@@ -29,6 +30,9 @@ class Map:
         return len(self.map)
 
     def get(self, pos):
+        if not self.in_map(pos):
+            raise Exception(f"{pos} outside of map")
+
         return self.map[pos.y][pos.x]
 
     def in_map(self, pos):
@@ -47,13 +51,13 @@ class Map:
             for y in range(self.height):
                 yield Pos(x, y)
 
-    def draw(self, positions=[]):
+    def draw(self, positions={}):
         print(f"Map: {self.width} x {self.height}")
         for y in range(self.height):
             for x in range(self.width):
                 pos = Pos(x, y)
                 if pos in positions:
-                    print("X", end=" ")
+                    print(positions[pos], end=" ")
                 else:
                     print(self.get(pos), end=" ")
             print()

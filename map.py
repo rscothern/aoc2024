@@ -35,6 +35,12 @@ class Map:
 
         return self.map[pos.y][pos.x]
 
+    def set(self, pos, val):
+        if not self.in_map(pos):
+            raise Exception(f"{pos} outside of map")
+
+        self.map[pos.y][pos.x] = val
+
     def in_map(self, pos):
         return all(
             [

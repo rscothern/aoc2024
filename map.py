@@ -15,6 +15,8 @@ class Pos(PosType):
     def add(self, other):
         return Pos(self.x + other.x, self.y + other.y)
 
+    def subtract(self, other):
+        return Pos(self.x - other.x, self.y - other.y)
 
 
 @dataclass

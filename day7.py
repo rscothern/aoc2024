@@ -1,6 +1,26 @@
 #!/usr/local/bin/python3
 
-def find_operators(filename):
+
+def do_find_operators(target, so_far, rem, equation):
+    if len(rem) == 0:
+        return target == so_far
+
+    return any(
+        [
+            do_find_operators(
+                target, so_far + rem[0], rem[1:], equation + ["+", rem[0]]
+            ),
+            do_find_operators(
+                target, so_far * rem[0], rem[1:], equation + ["*", rem[0]]
+            ),
+            do_find_operators(
+                target, int(f"{so_far}{rem[0]}"), rem[1:], equation + ["||", rem[0]]
+            ),
+        ]
+    )
+
+
+def day7(filename):
     total = 0
     with open(filename, "r") as f:
         for line in f.readlines():
@@ -12,25 +32,6 @@ def find_operators(filename):
 
     return total
 
-def do_find_operators(target, so_far, rem, equation):
-    if len(rem) == 0:
-        if target == so_far:
-            print(f"Success: {target=}, {equation=}")
-            return True
-        else:
-            return False
 
-    return any([
-        do_find_operators(target, so_far+rem[0], rem[1:], equation + ["+", rem[0]]),
-        do_find_operators(target, so_far*rem[0], rem[1:], equation + ["*", rem[0]]),
-        do_find_operators(target, int(f"{so_far}{rem[0]}"), rem[1:], equation + ["||", rem[0]])
-    ])
-
-
-def check(filename, expected):
-    res = find_operators(filename)
-    print(f"Got {res} for {filename}")
-
-
-check("day7test.txt", 3749)
-check("day7.txt", 945512582195)
+assert day7("day7test.txt") == 11387
+assert day7("day7.txt") == 271691107779347

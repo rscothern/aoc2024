@@ -1,14 +1,16 @@
 #!/usr/local/bin/python3
 
-from map import Pos
+from collections import defaultdict, namedtuple
 
 from dataclasses import dataclass
-from collections import defaultdict, namedtuple
+
+from map import Pos
 
 Vel = Pos
 
+
 @dataclass
-class Robot():
+class Robot:
     id: int
     pos: Pos
     vel: Vel
@@ -18,6 +20,7 @@ class Robot():
 
 
 Quardrant = namedtuple("Pos", "top_left bottom_right")
+
 
 def read_robots(filename):
     with open(filename, "r") as f:
@@ -30,6 +33,7 @@ def read_robots(filename):
             velocity = Vel(int(x), int(y))
             robot_data.append(Robot(i, startpos, velocity))
         return robot_data
+
 
 def move_robots(robot_data, width, height):
     for robot in robot_data:
@@ -46,24 +50,32 @@ def move_robots(robot_data, width, height):
         if new_pos.y >= height:
             y = new_pos.y - height
 
-        robot.pos = Pos(x,y)
+        robot.pos = Pos(x, y)
+
 
 def within_quadrant(quadrant, pos):
     return all(
-        [quadrant.top_left.x <= pos.x <= quadrant.bottom_right.x,
-         quadrant.top_left.y <= pos.y <= quadrant.bottom_right.y])
+        [
+            quadrant.top_left.x <= pos.x <= quadrant.bottom_right.x,
+            quadrant.top_left.y <= pos.y <= quadrant.bottom_right.y,
+        ]
+    )
 
 
-def calc_safety_factor(filename, width, height, seconds):
+def day14(filename, width, height, seconds):
     robots = read_robots(filename)
     for _ in range(seconds):
         move_robots(robots, width, height)
 
     quadrant_counts = defaultdict(int)
-    top_left = Quardrant(Pos(0,0), Pos(int(width/2) - 1, int(height/2-1)))
-    top_right = Quardrant(Pos(int(width/2+1), 0), Pos(width, int(height/2-1)))
-    bottom_left = Quardrant(Pos(0, int(height/2+1)), Pos(int(width/2-1), height))
-    bottom_right = Quardrant(Pos(int(width/2)+1, int(height/2+1)), Pos(width, height))
+    top_left = Quardrant(Pos(0, 0), Pos(int(width / 2) - 1, int(height / 2 - 1)))
+    top_right = Quardrant(Pos(int(width / 2 + 1), 0), Pos(width, int(height / 2 - 1)))
+    bottom_left = Quardrant(
+        Pos(0, int(height / 2 + 1)), Pos(int(width / 2 - 1), height)
+    )
+    bottom_right = Quardrant(
+        Pos(int(width / 2) + 1, int(height / 2 + 1)), Pos(width, height)
+    )
     quadrants = [top_left, top_right, bottom_left, bottom_right]
     for robot in robots:
         for quadrant in quadrants:
@@ -76,5 +88,6 @@ def calc_safety_factor(filename, width, height, seconds):
 
     return safety_factor
 
-assert calc_safety_factor("day14ex.txt", 11, 7, 100) == 12
-assert calc_safety_factor("day14.txt", 101, 103, 100) == 217328832
+
+assert day14("day14ex.txt", 11, 7, 100) == 12
+assert day14("day14.txt", 101, 103, 100) == 217328832

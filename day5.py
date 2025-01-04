@@ -6,23 +6,6 @@ from collections import defaultdict
 G = defaultdict(set)
 
 
-def process_file(filename):
-    middles = []
-    with open("day5.txt") as f:
-        for line in f.readlines():
-            if "|" in line:
-                f, t = line.strip().split("|")
-                G[f].add(t)
-            elif "," in line:
-                page_list = line.strip().split(",")
-                if check_page_order(page_list):
-                    if len(page_list) % 2 == 0:
-                        raise Exception(f"Cannot take middle of even number: {page_list}")
-                    middle_pos = int(len(page_list)/2)
-                    middles.append(int(page_list[middle_pos]))
-
-    return middles
-
 def check_page_order(pages):
     """
     If we can find a path through the graph of all pages
@@ -39,6 +22,25 @@ def check_page_order(pages):
 
     return check_page_order(pages[1:])
 
-middles = process_file("day5.txt")
-print(sum(middles))
-        
+
+def day5(filename):
+    middles = []
+    with open(filename, "r") as f:
+        for line in f.readlines():
+            if "|" in line:
+                f, t = line.strip().split("|")
+                G[f].add(t)
+            elif "," in line:
+                page_list = line.strip().split(",")
+                if check_page_order(page_list):
+                    if len(page_list) % 2 == 0:
+                        raise Exception(
+                            f"Cannot take middle of even number: {page_list}"
+                        )
+                    middle_pos = int(len(page_list) / 2)
+                    middles.append(int(page_list[middle_pos]))
+
+    return sum(middles)
+
+
+assert day5("day5.txt") == 7307

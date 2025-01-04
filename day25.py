@@ -1,21 +1,23 @@
 #!/usr/local/bin/python3
 
+
 class Key:
     def __init__(self):
-        self.vals = [0,0,0,0,0]
+        self.vals = [0, 0, 0, 0, 0]
 
     @property
     def pins(self):
         # in favour of more generic parsing, remove the bottom
         # row of pins here
-        return [v-1 for v in self.vals]
+        return [v - 1 for v in self.vals]
 
-    def __repr__(self):
+    def __str__(self):
         return f"Key({self.pins})"
+
 
 class Lock:
     def __init__(self):
-        self.vals = [0,0,0,0,0]
+        self.vals = [0, 0, 0, 0, 0]
 
     @property
     def pins(self):
@@ -54,6 +56,7 @@ def compare(obj1, obj2):
             return False
     return True
 
+
 def find_matches(filename):
     objects = parse_keys_and_locks(filename)
     keys = list(filter(lambda o: isinstance(o, Key), objects))
@@ -63,5 +66,3 @@ def find_matches(filename):
 
 assert find_matches("day25ex.txt") == 3
 assert find_matches("day25.txt") == 2824
-
-        

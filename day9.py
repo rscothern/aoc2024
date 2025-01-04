@@ -15,10 +15,12 @@ class Node:
     def is_space(self):
         return self.val == "."
 
-    def __repr__(self):
+    def __str__(self):
         return self.val
-        
+
+
 SPACE_NODE = Node(".", -1)
+
 
 def explode(disk_map):
     repr = []
@@ -57,10 +59,12 @@ def checksum(accumulated):
 
     return checksum
 
+
 def day9(filename):
     with open(filename, "r") as f:
         input = f.read().strip()
         return checksum(compress(explode(input)))
+
 
 assert day9("day9ex.txt") == 1928
 assert day9("day9.txt") == 6415184586041

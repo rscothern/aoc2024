@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 from io import UnsupportedOperation
 
+
 def load_program(filename):
     a_val, b_val, c_val = 0, 0, 0
     program = ""
@@ -17,12 +18,10 @@ def load_program(filename):
                 program = line.split(":")[1]
                 program = [int(n) for n in program.split(",")]
 
-    return Computer(
-        a_val, b_val, c_val, program
-    )
+    return Computer(a_val, b_val, c_val, program)
 
 
-class Computer():
+class Computer:
     OPCODES = {
         0: "adv",
         1: "bxl",
@@ -31,7 +30,7 @@ class Computer():
         4: "bxc",
         5: "out",
         6: "bdv",
-        7: "cdv"
+        7: "cdv",
     }
 
     def __init__(self, register_a, register_b, register_c, program):
@@ -42,14 +41,14 @@ class Computer():
         self.pc = 0
         self.output = []
 
-    def __repr__(self):
+    def __str__(self):
         return f"Computer({self.register_a=}, {self.register_b=}, {self.register_c=}, {self.program}"
 
     def get_output(self):
         return ",".join(str(o) for o in self.output)
 
     def combo(self, operand):
-        if operand in [0,1,2,3]:
+        if operand in [0, 1, 2, 3]:
             return operand
         if operand == 4:
             return self.register_a
@@ -102,15 +101,16 @@ class Computer():
                 break
 
             opcode = self.program[self.pc]
-            operand = self.program[self.pc+1]
+            operand = self.program[self.pc + 1]
             f = getattr(self, self.OPCODES[opcode])
             f(operand)
 
 
-c = load_program("day17ex.txt")
-c.run()
-assert c.get_output() == "4,6,3,5,6,3,5,2,1,0"
+def day17(filename):
+    c = load_program(filename)
+    c.run()
+    return c.get_output()
 
-c = load_program("day17.txt")
-c.run()
-assert c.get_output() == "2,7,2,5,1,2,7,3,7"
+
+assert day17("day17ex.txt") == "4,6,3,5,6,3,5,2,1,0"
+assert day17("day17.txt") == "2,7,2,5,1,2,7,3,7"

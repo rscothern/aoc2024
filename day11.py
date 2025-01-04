@@ -3,6 +3,7 @@
 from collections import defaultdict
 from copy import copy
 
+
 def do_blink(stone_counts):
     current_stones = copy(stone_counts)
     for stone, count in current_stones.items():
@@ -14,8 +15,8 @@ def do_blink(stone_counts):
             stone_counts[1] += count
         elif len(stone_str) % 2 == 0:
             l = len(stone_str)
-            first = int(stone_str[0:int(l/2)])
-            second = int(stone_str[int(l/2):])
+            first = int(stone_str[0 : int(l / 2)])
+            second = int(stone_str[int(l / 2) :])
 
             stone_counts[first] += count
             stone_counts[second] += count
@@ -26,15 +27,16 @@ def do_blink(stone_counts):
     return stone_counts
 
 
-def blink(stones_str, n):
+def day11(stones_str, n):
     stone_counts = defaultdict(int)
     for val in stones_str.split():
         stone_counts[val] = 1
 
-    for i in range(1, n+1):
+    for i in range(1, n + 1):
         stone_counts = do_blink(stone_counts)
-        print(i, len(stone_counts))
+        # print(i, len(stone_counts))
     return sum(stone_counts.values())
 
-print(blink("125 17", 25))
-print(blink("77 515 6779622 6 91370 959685 0 9861", 75))
+
+assert day11("125 17", 25) == 555312
+assert day11("77 515 6779622 6 91370 959685 0 9861", 75) == 215933828786931

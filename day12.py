@@ -1,11 +1,12 @@
 #!/usr/local/bin/python3
 
 
-from map import Pos, Map
+from map import Map, Pos
+
 
 def load_map(filename):
     map = []
-    with open(filename) as f:
+    with open(filename, "r") as f:
         for _, line in enumerate(f.readlines()):
             line = list(line.strip())
             map.append(line)
@@ -55,7 +56,7 @@ def neighbour_plants(map, pos, plant):
 def do_explore(map, pos, plant, seen):
     cur_plant = map.get(pos)
     if cur_plant != plant:
-        return 
+        return
 
     if pos not in seen:
         seen.append(pos)
@@ -82,7 +83,7 @@ def do_get_fences(plant_area, idx, fences):
 
     current_pos = plant_area[idx]
 
-    for offset in Pos(0,0).adjacent:
+    for offset in Pos(0, 0).adjacent:
         maybe_fence = Pos(current_pos.x + offset.x, current_pos.y + offset.y)
         if maybe_fence not in plant_area:
             fences.append(maybe_fence)
@@ -90,8 +91,8 @@ def do_get_fences(plant_area, idx, fences):
     do_get_fences(plant_area, idx + 1, fences)
 
 
-def calculate_cost(filename):
-    map= load_map(filename)
+def day12(filename):
+    map = load_map(filename)
     areas = explore_areas(map)
     total_cost = 0
     for _, positions in areas.items():
@@ -101,9 +102,6 @@ def calculate_cost(filename):
     return total_cost
 
 
-cost = calculate_cost("day12ex.txt")
-assert cost == 140
-cost = calculate_cost("day12ex2.txt")
-assert cost == 1930
-cost = calculate_cost("day12.txt")
-assert cost == 1477762
+assert day12("day12ex.txt") == 140
+assert day12("day12ex2.txt") == 1930
+assert day12("day12.txt") == 1477762

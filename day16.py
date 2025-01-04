@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 from heapq import heappop, heappush
+from typing import Optional
 
 from map import Map, Pos
 
@@ -12,7 +12,7 @@ from map import Map, Pos
 def load_map(filename):
     map = []
     start_pos = None
-    with open(filename) as f:
+    with open(filename, "r") as f:
         for y, line in enumerate(f.readlines()):
             map.append(line.strip())
             for x, char in enumerate(line):
@@ -28,12 +28,14 @@ class Direction(Enum):
     SOUTH = 2
     WEST = 3
 
+
 get_direction = {
     Pos(0, -1): Direction.NORTH,
     Pos(1, 0): Direction.EAST,
     Pos(0, 1): Direction.SOUTH,
     Pos(-1, 0): Direction.WEST,
 }
+
 
 @dataclass(frozen=True)
 class Node:
@@ -45,7 +47,7 @@ class Node:
     def __eq__(self, other):
         return self.pos == other.pos
 
-    def __repr__(self):
+    def __str__(self):
         if self.pred is None:
             pred_str = "None"
         else:
@@ -57,6 +59,7 @@ class Node:
 
     def __hash__(self):
         return hash(self.pos)
+
 
 def already_seen(pos, seen):
     for p in seen:
@@ -108,13 +111,13 @@ def best_path(map, start_pos):
             seen.add(next_node)
             heappush(pq, next_node)
 
+    return []
+
+
+def day16(filename):
+    map, start_pos = load_map(filename)
+    score, path = best_path(map, start_pos)
     return score
 
 
-map, start_pos = load_map("day16ex.txt")
-score, path = best_path(map, start_pos)
-map.draw(path)
-
-map, start_pos = load_map("day16.txt")
-score, path = best_path(map, start_pos)
-assert score == 109516
+assert day16("day16.txt") == 109516
